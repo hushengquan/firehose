@@ -28,7 +28,7 @@ public class TencentCloudStorage implements BlobStorage {
         COSSessionCredentials cred = credentialProvider.getCOSCredentials();
         ClientConfig clientConfig = new ClientConfig(new Region(cosConfig.getCosRegion()));
         this.cosClient = new COSClient(cred, clientConfig);
-        this.credentialRefresher = new CredentialRefresher(this.cosConfig, this.cosClient, this.credentialProvider);
+        this.credentialRefresher = new CredentialRefresher(cosConfig, cosClient, credentialProvider);
     }
 
     public TencentCloudStorage(COSConfig cosConfig,
@@ -43,7 +43,6 @@ public class TencentCloudStorage implements BlobStorage {
 
     @Override
     public void store(String objectName, String filePath) throws BlobStorageException {
-        credentialRefresher.softRefreshCredential();
         String finalPath = getAbsolutePath(objectName);
         try {
             byte[] content = Files.readAllBytes(Paths.get(filePath));
@@ -73,8 +72,8 @@ public class TencentCloudStorage implements BlobStorage {
 
     private String getAbsolutePath(String objectName) {
         String prefix = cosConfig.getCOSDirectoryPrefix();
-        if (prefix != null && !prefix.endsWith("/") &&
-                objectName.startsWith("/")) {
+        if (prefix != null && !prefix.endsWith("/")
+                && objectName.startsWith("/")) {
             prefix += "/";
         }
         return prefix == null || prefix.isEmpty() ? objectName : Paths.get(prefix, objectName).toString();

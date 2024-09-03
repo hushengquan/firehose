@@ -66,9 +66,9 @@ public class CredentialProvider {
     }
 
     private String getResource() {
-        String prefix = cosConfig.getCOSDirectoryPrefix() == null ||
-                cosConfig.getCOSDirectoryPrefix().isEmpty() ?
-                "/" : cosConfig.getCOSDirectoryPrefix();
+        String prefix = cosConfig.getCOSDirectoryPrefix() == null
+                || cosConfig.getCOSDirectoryPrefix().isEmpty()
+                ? "/" : cosConfig.getCOSDirectoryPrefix();
         if (!prefix.startsWith("/")) {
             prefix = "/" + prefix;
         }

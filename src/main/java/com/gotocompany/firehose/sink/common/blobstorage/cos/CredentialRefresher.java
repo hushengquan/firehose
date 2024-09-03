@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class CredentialRefresher {
     private static final Logger LOGGER = LoggerFactory.getLogger(CredentialRefresher.class);
+    private static final long MILLIS_IN_A_SECOND = 1000L; // milliseconds conversion factor
 
     private final COSConfig cosConfig;
     private final COSClient cosClient;
@@ -44,7 +45,7 @@ public class CredentialRefresher {
 
     private boolean checkSoftRefreshTimestamp() {
         return System.currentTimeMillis() - lastRefreshTimestamp
-                > cosConfig.getCOSTempCredentialValiditySeconds() * 1000L && !refreshTask.isRunning;
+                > cosConfig.getCOSTempCredentialValiditySeconds() * MILLIS_IN_A_SECOND && !refreshTask.isRunning;
     }
 
     private class RefreshTask implements Runnable {
